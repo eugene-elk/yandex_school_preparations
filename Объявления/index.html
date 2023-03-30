@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Gazetta</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-</head>
-<body>
-    <div class="root">
-        <div class="el">Их не нужно менять</div>
-        <div class="el">Их не нужно менять</div>
-        <div class="el">Каждое объявление должно быть свободным по высоте</div>
-        <div class="el">вот ширину нужно будет выставить</div>
-        <div class="el">Ширину элемента root, при необходимости вы можете определить, но в тестах она может быть разная</div>
-    </div>
-</body>
+    <head>
+        <title>Gazetta</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <style>
+            .root {background: linear-gradient(130deg, white, skyblue);}
+            .el {padding: 10px; border: 1px solid #111111}
+        </style>
+    </head>
+    <body>
+        <div class="root">
+            <div class="el">У каждого объявления есть свои стили</div>
+            <div class="el">Их не нужно менять</div>
+            <div class="el">Каждое объявление должно быть свободным по высоте</div>
+            <div class="el">вот ширину нужно будет выставить</div>
+            <div class="el">Ширину элемента root, при необходимости вы можете определить, но в тестах она может быть разная</div>
+        </div>
+    </body>
+    <script src="./solution.js"></script>
+    <script>
+        var rootNode = document.getElementsByClassName("root")[0];
+        renderWaterfall(rootNode, 3, 10);
+    </script>
 </html>
