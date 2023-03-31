@@ -166,7 +166,7 @@
                 },
                 'dragenter': {
                     'Letter': function onLetterDragEnter(e) {
-                        
+                        addClass(e.target, 'Letter_dragovered');
                     },
                     'Tag': function onTagsDragEnter(e) {
                         
@@ -180,9 +180,9 @@
 
                     }
                 },
-                'dragover': {
+                'dragleave': {
                     'Letter': function onLetterDragLeave(e) {
-                        
+                        removeClass(e.target, 'Letter_dragovered');
                     },
                     'Tag': function onTagsDragLeave(e) {
 
