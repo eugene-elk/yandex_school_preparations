@@ -50,20 +50,12 @@ function renderWaterfall(rootNode, columnCount = 3, gap = 20) {
         return columnElement;
     });
 
-    console.warn("columnsElements:", columnsElements);
-
     // Массив высоты колонок
     let columnsHeight = new Array(columnCount).fill(0);
-    console.warn("columnsHeight:", columnsHeight);
 
     while(letters.length) {
         let idx = findBestColumnIndex(columnsHeight);
         columnsElements[idx].appendChild(letters.shift()); 
-        console.warn(idx, "begore adding height:", columnsHeight[idx]);
         columnsHeight[idx] = columnsElements[idx].clientHeight;
-        console.warn("New height of", idx, ":", columnsElements[idx].offsetHeight);
-
-        console.warn(idx, "after adding height:", columnsHeight[idx]);
-        console.warn("columnsHeight:", columnsHeight);
     }
 }
