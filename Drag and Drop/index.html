@@ -144,6 +144,67 @@
             }
   
             document.body.innerHTML = buildHtml(data);
+
+            function addClass(n, c) { n.classList.add(c) }
+            function removeClass(n, c) { n.classList.remove(c) }
+
+            const tags = document.querySelector('.Tags');
+            const letters = document.querySelector('.Letters');
+
+            Object.entries({
+                'dragstart': {
+                    'Tag': function onTagDragStart({target, dataTransfer}) {
+                        addClass(target, 'Tag_dragged');
+                        addClass(letters, 'Letters_dropzone');
+                    }
+                },
+                'dragend': {
+                    'Tag': function onTagDragEnd(e) {
+                        removeClass(e.target, 'Tag_dragged');
+                        removeClass(letters, 'Letters_dropzone');
+                    }
+                },
+                'dragenter': {
+                    'Letter': function onLetterDragEnter(e) {
+                        
+                    },
+                    'Tag': function onTagsDragEnter(e) {
+                        
+                    }
+                },
+                'dragover': {
+                    'Letter': function onLetterDragOver(e) {
+                        
+                    },
+                    'Tag': function onTagsDragOver(e) {
+
+                    }
+                },
+                'dragover': {
+                    'Letter': function onLetterDragLeave(e) {
+                        
+                    },
+                    'Tag': function onTagsDragLeave(e) {
+
+                    }
+                },
+                'drop': {
+                    'Tag': function onTagDrop({target, dataTransfer}) {
+                        addClass(target, 'Tag_dragged');
+                        addClass(letters, 'Letters_dropzone');
+                    },
+                    'Letter': function onLetterDrop(e) {
+                        
+                    },
+                }
+            }).forEach(([eventType, handlers]) => {
+                document.addEventListener(eventType, (e) => {
+                    for (let classname in handlers) {
+                        e.target.classList.contains(classname) && handlers[classname](e);
+                    }
+                })
+            })
+
             window.onSolutionReady && window.onSolutionReady();
         </script>
     </body>
