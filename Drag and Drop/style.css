@@ -1,0 +1,77 @@
+.Page {
+    font-family: Arial;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    color: #2f2d33;
+  }
+  
+  .Logo {
+    font-size: 24px;
+    padding: 12px;
+    margin: 0;
+  }
+  
+  .Main {
+    display: flex;
+  }
+  
+  .Tags {
+    width: 25%;
+    background-color: #fffae5;
+    padding: 6px;
+  }
+  
+  .Tags_dropzone {
+    background-color: #ffedba;
+  }
+  
+  .Tags_dragovered {
+    background-color: #ffd98e;
+  }
+  
+  .Tags_dragovered * {
+    pointer-events: none;
+  }
+  
+  .Tag {
+    background-color: #ffc062;
+    color: #592400;
+    margin: 6px;
+    padding: 6px;
+    display: inline-block;
+  }
+  
+  .Tag_dragged {
+    background-color: #ff9100;
+  }
+  
+  .Tag_removed {
+    display: none;
+  }
+  
+  .Letters {
+    width: 100%;
+    background-color: #91cfff;
+  }
+  
+  .Letters_dropzone {
+    background-color: #4da0ff;
+  }
+  
+  .Letter {
+    display: flex;
+    color: #00244d;
+  }
+  
+  .Letter_dragovered {
+    background-color: #006fed;
+  }
+  
+  .Letter_dragovered * {
+    pointer-events: none;
+  }
+  
+  .Letter__Title {
+    margin: 12px;
+  }
