@@ -56,6 +56,6 @@ function renderWaterfall(rootNode, columnCount = 3, gap = 20) {
     while(letters.length) {
         let idx = findBestColumnIndex(columnsHeight);
         columnsElements[idx].appendChild(letters.shift()); 
-        columnsHeight[idx] = columnsElements[idx].clientHeight;
+        columnsHeight[idx] = columnsElements[idx].offsetHeight;
     }
 }
