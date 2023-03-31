@@ -151,50 +151,86 @@
             const tags = document.querySelector('.Tags');
             const letters = document.querySelector('.Letters');
 
+            function selectTag(letter, tag) {
+                return typeof letter === 'string' 
+                    ? document.querySelector(`[data-letter-id="${letter}"] [data-tag-id="${tag}"]`)
+                    : letter.querySelector(`.Tag[data-tag-id="${tag}"]`);
+            }
+
+            function isNewTag({ target, dataTransfer }) {
+                return dataTransfer.types.includes('tag') && 
+                    !selectTag(
+                        target,
+                        dataTransfer.types
+                            .find((t) => t.startsWith('tag-'))
+                            .replace(/^tag-/, '')
+                    )
+            }
+            function isLetterTag({ dataTransfer }) {
+                return dataTransfer.types.includes('letter');
+            }
+
             Object.entries({
                 'dragstart': {
                     'Tag': function onTagDragStart({target, dataTransfer}) {
                         addClass(target, 'Tag_dragged');
                         addClass(letters, 'Letters_dropzone');
+                        const id = target.dataset.tagId;
+                        dataTransfer.setData('tag', id);
+                        dataTransfer.setData('tag-' + id, id); // для возможности чтения id откуда угодно
+                        const letter = target.closest('.Letter');
+                        if (letter) {
+                            addClass(tags, 'Tags_dropzone');
+                            dataTransfer.setData('letter', letter.dataset.letterId);
+                        }
                     }
                 },
                 'dragend': {
                     'Tag': function onTagDragEnd(e) {
                         removeClass(e.target, 'Tag_dragged');
                         removeClass(letters, 'Letters_dropzone');
+                        removeClass(tags, 'Tags_dropzone');
+                        document.querySelectorAll('.Tag_removed').forEach((t) => t.remove());
                     }
                 },
                 'dragenter': {
                     'Letter': function onLetterDragEnter(e) {
-                        addClass(e.target, 'Letter_dragovered');
+                        isNewTag(e) && addClass(e.target, 'Letter_dragovered');
                     },
-                    'Tag': function onTagsDragEnter(e) {
-                        
+                    'Tags': function onTagsDragEnter(e) {
+                        isLetterTag(e) && addClass(e.target, 'Tags_dragovered');
                     }
                 },
                 'dragover': {
                     'Letter': function onLetterDragOver(e) {
-                        
+                        isNewTag(e) && e.preventDefault();
                     },
-                    'Tag': function onTagsDragOver(e) {
-
+                    'Tags': function onTagsDragOver(e) {
+                        isLetterTag(e) && e.preventDefault();
                     }
                 },
                 'dragleave': {
                     'Letter': function onLetterDragLeave(e) {
-                        removeClass(e.target, 'Letter_dragovered');
+                        isNewTag(e) && removeClass(e.target, 'Letter_dragovered'); 
                     },
-                    'Tag': function onTagsDragLeave(e) {
-
+                    'Tags': function onTagsDragLeave(e) {
+                        isLetterTag(e) && removeClass(e.targer, 'Tags_dragovered');
                     }
                 },
                 'drop': {
-                    'Tag': function onTagDrop({target, dataTransfer}) {
-                        addClass(target, 'Tag_dragged');
-                        addClass(letters, 'Letters_dropzone');
+                    'Tags': function onTagsDrop({target, dataTransfer}) {
+                        target.classList.remove('Tags_dragovered');
+                        const tag = selectTag(dataTransfer.getData('letter'), dataTransfer.getData('tag'));
+                        addClass(tag, 'Tag_removed');
+                        target.append(tag);
                     },
                     'Letter': function onLetterDrop(e) {
-                        
+                        removeClass(e.target, 'Letter_dragovered');
+                        const letterId = e.dataTransfer.getData('letter');
+                        const tagId = e.dataTransfer.getData('tag');
+                        letterId
+                            ? e.target.append(selectTag(letterId, tagId))
+                            : e.target.insertAdjacentHTML('beforeend', buildTagHtml(tagId, data.tags[tagId]))
                     },
                 }
             }).forEach(([eventType, handlers]) => {
@@ -203,7 +239,7 @@
                         e.target.classList.contains(classname) && handlers[classname](e);
                     }
                 })
-            })
+            }) 
 
             window.onSolutionReady && window.onSolutionReady();
         </script>
