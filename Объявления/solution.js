@@ -36,12 +36,14 @@ function renderWaterfall(rootNode, columnCount = 3, gap = 20) {
     const columnWidth = (rootNode.offsetWidth - allGapsWidth) / columnCount; 
 
     const letters = Array.from(rootNode.children); 
+    rootNode.innerHTML = '';
 
     /**@type {HTMLDivElement[]} */
     const columnsElements = new Array(columnCount).fill().map(() => {
         const columnElement = document.createElement('div');
         columnElement.className = 'column';
         columnElement.style.width = `${columnWidth}px`;
+        columnElement.style.height = 'max-content';
         
         rootNode.appendChild(columnElement);
 
@@ -58,9 +60,8 @@ function renderWaterfall(rootNode, columnCount = 3, gap = 20) {
         let idx = findBestColumnIndex(columnsHeight);
         columnsElements[idx].appendChild(letters.shift()); 
         console.warn(idx, "begore adding height:", columnsHeight[idx]);
-        //setTimeout(() => {columnsHeight[idx] = columnsElements[idx].offsetHeight}, 1);
-        console.warn("New height of", idx, ":", document.getElementsByClassName('column')[idx].offsetHeight);
-        columnsHeight[idx] = document.getElementsByClassName('column')[idx].offsetHeight;
+        columnsHeight[idx] = columnsElements[idx].clientHeight;
+        console.warn("New height of", idx, ":", columnsElements[idx].offsetHeight);
 
         console.warn(idx, "after adding height:", columnsHeight[idx]);
         console.warn("columnsHeight:", columnsHeight);
