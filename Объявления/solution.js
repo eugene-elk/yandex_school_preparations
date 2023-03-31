@@ -3,30 +3,39 @@
 /**@type {(arr: number[]) => number} */
 const findBestColumnIndex = (arr) => {
     let minIndex = 0;
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] < arr[minIndex]) {
+            minIndex = i;
+        }
+    }
+    console.warn("minIndex:", minIndex);
+    /*
     arr.forEach((item, index) => {
-        if (item < arr[minIndex]) minIndex = index;
+        if (item < ) minIndex = index;
     });
+    */
     return minIndex;
 };
 
 /**@type {RenderWaterfall} */
 function renderWaterfall(rootNode, columnCount = 3, gap = 20) {
 
-    const allGapsWidth = gap * (columnCount - 1);
-    const columnWidth = (rootNode.offsetWidth - allGapsWidth) / columnCount; 
-
-    console.log(rootNode);
     rootNode.style.display = 'flex';
     rootNode.style.justifyContent = 'space-between';
 
     const styleTag = document.createElement('style');
-    const css = `  
+    const css = `
         .column :not(:last-child) {
             margin-bottom: ${gap}px;
         }
     `;
     styleTag.appendChild(document.createTextNode(css));
     document.body.appendChild(styleTag);
+
+    const allGapsWidth = gap * (columnCount - 1);
+    const columnWidth = (rootNode.offsetWidth - allGapsWidth) / columnCount; 
+
+    const letters = Array.from(rootNode.children); 
 
     /**@type {HTMLDivElement[]} */
     const columnsElements = new Array(columnCount).fill().map(() => {
@@ -37,16 +46,23 @@ function renderWaterfall(rootNode, columnCount = 3, gap = 20) {
         rootNode.appendChild(columnElement);
 
         return columnElement;
-    })
+    });
+
+    console.warn("columnsElements:", columnsElements);
 
     // Массив высоты колонок
-    const columnsHeight = new Array(columnCount).fill(0);
+    let columnsHeight = new Array(columnCount).fill(0);
+    console.warn("columnsHeight:", columnsHeight);
 
-    while(rootNode.children.length) {
-        const idx = findBestColumnIndex(columnsHeight);
-        columnsElements[idx].appendChile(rootNode.children[0]);
-        columnsHeight = columnsElements[idx].offsetHeight;
+    while(letters.length) {
+        let idx = findBestColumnIndex(columnsHeight);
+        columnsElements[idx].appendChild(letters.shift()); 
+        console.warn(idx, "begore adding height:", columnsHeight[idx]);
+        //setTimeout(() => {columnsHeight[idx] = columnsElements[idx].offsetHeight}, 1);
+        console.warn("New height of", idx, ":", document.getElementsByClassName('column')[idx].offsetHeight);
+        columnsHeight[idx] = document.getElementsByClassName('column')[idx].offsetHeight;
+
+        console.warn(idx, "after adding height:", columnsHeight[idx]);
+        console.warn("columnsHeight:", columnsHeight);
     }
-  
-    
 }
